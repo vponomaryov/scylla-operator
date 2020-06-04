@@ -264,11 +264,8 @@ func StatefulSetForRack(r scyllav1alpha1.RackSpec, c *scyllav1alpha1.Cluster, si
 									ReadOnly:  true,
 								},
 							},
-							// Add CAP_SYS_NICE as instructed by scylla logs
 							SecurityContext: &corev1.SecurityContext{
-								Capabilities: &corev1.Capabilities{
-									Add: []corev1.Capability{"SYS_NICE"},
-								},
+								Privileged: &opt,
 							},
 							LivenessProbe: &corev1.Probe{
 								// Initial delay should be big, because scylla runs benchmarks
