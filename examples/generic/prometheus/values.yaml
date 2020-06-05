@@ -657,7 +657,7 @@ server:
 
     ## Prometheus server data Persistent Volume size
     ##
-    size: 100Gi
+    size: 50Gi
 
     ## Prometheus server data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -666,7 +666,7 @@ server:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    # storageClass: "-"
+    storageClass: local-raid-disks
 
     ## Subdirectory of Prometheus server data Persistent Volume to mount
     ## Useful if the volume's root directory is not empty
@@ -703,8 +703,8 @@ server:
   ##
   resources:
     limits:
-      cpu: 4
-      memory: 16Gi
+      cpu: 1
+      memory: 10Gi
     # requests:
     #   cpu: 500m
     #   memory: 512Mi
