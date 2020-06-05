@@ -12,6 +12,7 @@ import (
 	"github.com/magiconair/properties"
 	"github.com/pkg/errors"
 	"github.com/scylladb/go-log"
+	"github.com/scylladb/scylla-operator/cmd/options"
 	"github.com/scylladb/scylla-operator/pkg/apis/scylla/v1alpha1"
 	"github.com/scylladb/scylla-operator/pkg/naming"
 	"github.com/scylladb/scylla-operator/pkg/sidecar/identity"
@@ -178,6 +179,7 @@ func (s *ScyllaConfig) setupEntrypoint(ctx context.Context) (*exec.Cmd, error) {
 		fmt.Sprintf("--broadcast-rpc-address=%s", m.StaticIP),
 		fmt.Sprintf("--seeds=%s", strings.Join(seeds, ",")),
 		fmt.Sprintf("--developer-mode=%s", devMode),
+		fmt.Sprintf("--smp=%s", options.GetSidecarOptions().CPU),
 	}
 
 	// See if we need to use cpu-pinning
