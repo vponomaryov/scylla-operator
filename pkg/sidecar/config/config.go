@@ -190,11 +190,12 @@ func (s *ScyllaConfig) setupEntrypoint(ctx context.Context) (*exec.Cmd, error) {
 	// Now we rely completely on the user to have the cpu policy correctly
 	// configured in the kubelet, otherwise scylla will crash.
 	if cluster.Spec.CpuSet {
-		cpusAllowed, err := getCPUsAllowedList("/proc/1/status")
-		if err != nil {
-			return nil, errors.WithStack(err)
-		}
+		//cpusAllowed, err := getCPUsAllowedList("/proc/1/status")
+		//if err != nil {
+		//	return nil, errors.WithStack(err)
+		//}
 
+		cpusAllowed := "1-7"
 		args = append(args, fmt.Sprintf("--cpuset=%s", cpusAllowed))
 	}
 
