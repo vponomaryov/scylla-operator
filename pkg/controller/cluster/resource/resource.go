@@ -274,9 +274,8 @@ func StatefulSetForRack(r scyllav1alpha1.RackSpec, c *scyllav1alpha1.Cluster, si
 								TimeoutSeconds:      int32(5),
 								PeriodSeconds:       int32(10),
 								Handler: corev1.Handler{
-									HTTPGet: &corev1.HTTPGetAction{
-										Port: intstr.FromInt(naming.ProbePort),
-										Path: naming.LivenessProbePath,
+									Exec: &corev1.ExecAction{
+										Command: []string{"true"},
 									},
 								},
 							},
