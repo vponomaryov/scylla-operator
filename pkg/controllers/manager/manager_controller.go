@@ -12,7 +12,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/scylladb/go-log"
 	"github.com/scylladb/scylla-operator/pkg/api/v1alpha1"
-	"github.com/scylladb/scylla-operator/pkg/mermaidclient"
+	"github.com/scylladb/scylla-operator/pkg/managerclient"
 	"github.com/scylladb/scylla-operator/pkg/naming"
 	"go.uber.org/multierr"
 	"gopkg.in/yaml.v2"
@@ -31,7 +31,7 @@ import (
 type Reconciler struct {
 	client.Client
 	UncachedClient client.Client
-	ManagerClient  *mermaidclient.Client
+	ManagerClient  *managerclient.Client
 
 	IgnoredNamespace string
 
@@ -71,7 +71,7 @@ func New(ctx context.Context, mgr mgr.Manager, ignoredNamespace string, logger l
 	}, nil
 }
 
-func discoverManager(ctx context.Context, mgr mgr.Manager) (*mermaidclient.Client, error) {
+func discoverManager(ctx context.Context, mgr mgr.Manager) (*managerclient.Client, error) {
 	cl, err := client.New(mgr.GetConfig(), client.Options{
 		Scheme: mgr.GetScheme(),
 	})
@@ -97,7 +97,7 @@ func discoverManager(ctx context.Context, mgr mgr.Manager) (*mermaidclient.Clien
 		Path:   "/api/v1",
 	}).String()
 
-	manager, err := mermaidclient.NewClient(apiAddress, &http.Transport{})
+	manager, err := managerclient.NewClient(apiAddress, &http.Transport{})
 	if err != nil {
 		return nil, errors.Wrap(err, "create manager client")
 	}
@@ -218,8 +218,8 @@ func (r *Reconciler) managerState(ctx context.Context, clusterID string) (*state
 				return nil, err
 			}
 
-			repairTasks = make([]*RepairTask, 0, len(managerRepairTasks.ExtendedTaskSlice))
-			for _, managerRepairTask := range managerRepairTasks.ExtendedTaskSlice {
+			repairTasks = make([]*RepairTask, 0, len(managerRepairTasks))
+			for _, managerRepairTask := range managerRepairTasks {
 				rt := &RepairTask{}
 				if err := rt.FromManager(managerRepairTask); err != nil {
 					return nil, err
@@ -232,8 +232,8 @@ func (r *Reconciler) managerState(ctx context.Context, clusterID string) (*state
 				return nil, err
 			}
 
-			backupTasks = make([]*BackupTask, 0, len(managerBackupTasks.ExtendedTaskSlice))
-			for _, managerBackupTask := range managerBackupTasks.ExtendedTaskSlice {
+			backupTasks = make([]*BackupTask, 0, len(managerBackupTasks))
+			for _, managerBackupTask := range managerBackupTasks {
 				bt := &BackupTask{}
 				if err := bt.FromManager(managerBackupTask); err != nil {
 					return nil, err

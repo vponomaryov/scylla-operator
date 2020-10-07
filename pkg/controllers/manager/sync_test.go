@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/scylladb/scylla-operator/pkg/api/v1alpha1"
-	"github.com/scylladb/scylla-operator/pkg/mermaidclient"
+	"github.com/scylladb/scylla-operator/pkg/managerclient"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/pointer"
 )
@@ -38,7 +38,7 @@ func TestManagerSynchronization(t *testing.T) {
 			State:  state{},
 
 			Requeue: true,
-			Actions: []action{&addClusterAction{cluster: &mermaidclient.Cluster{Name: clusterName}}},
+			Actions: []action{&addClusterAction{cluster: &managerclient.Cluster{Name: clusterName}}},
 		},
 		{
 			Name: "Empty manager, task in spec, add cluster and requeue",
@@ -49,14 +49,14 @@ func TestManagerSynchronization(t *testing.T) {
 			State:  state{},
 
 			Requeue: true,
-			Actions: []action{&addClusterAction{cluster: &mermaidclient.Cluster{Name: clusterName}}},
+			Actions: []action{&addClusterAction{cluster: &managerclient.Cluster{Name: clusterName}}},
 		},
 		{
 			Name:   "Cluster registered in manager do nothing",
 			Spec:   v1alpha1.ClusterSpec{},
 			Status: v1alpha1.ClusterStatus{},
 			State: state{
-				Clusters: []*mermaidclient.Cluster{{
+				Clusters: []*managerclient.Cluster{{
 					Name:      clusterName,
 					AuthToken: clusterAuthToken,
 				}},
@@ -72,7 +72,7 @@ func TestManagerSynchronization(t *testing.T) {
 				ManagerID: pointer.StringPtr(clusterID),
 			},
 			State: state{
-				Clusters: []*mermaidclient.Cluster{{
+				Clusters: []*managerclient.Cluster{{
 					ID:        clusterID,
 					Name:      clusterName,
 					AuthToken: "different-auth-token",
@@ -80,7 +80,7 @@ func TestManagerSynchronization(t *testing.T) {
 			},
 
 			Requeue: true,
-			Actions: []action{&updateClusterAction{cluster: &mermaidclient.Cluster{ID: clusterID}}},
+			Actions: []action{&updateClusterAction{cluster: &managerclient.Cluster{ID: clusterID}}},
 		},
 		{
 			Name: "Name collision, delete old one, add new and requeue",
@@ -89,7 +89,7 @@ func TestManagerSynchronization(t *testing.T) {
 				ManagerID: pointer.StringPtr(clusterID),
 			},
 			State: state{
-				Clusters: []*mermaidclient.Cluster{{
+				Clusters: []*managerclient.Cluster{{
 					ID:   "different-id",
 					Name: clusterName,
 				}},
@@ -98,7 +98,7 @@ func TestManagerSynchronization(t *testing.T) {
 			Requeue: true,
 			Actions: []action{
 				&deleteClusterAction{clusterID: "different-id"},
-				&addClusterAction{cluster: &mermaidclient.Cluster{Name: clusterName}},
+				&addClusterAction{cluster: &managerclient.Cluster{Name: clusterName}},
 			},
 		},
 		{
@@ -120,14 +120,14 @@ func TestManagerSynchronization(t *testing.T) {
 				ManagerID: pointer.StringPtr(clusterID),
 			},
 			State: state{
-				Clusters: []*mermaidclient.Cluster{{
+				Clusters: []*managerclient.Cluster{{
 					ID:        clusterID,
 					Name:      clusterName,
 					AuthToken: clusterAuthToken,
 				}},
 			},
 
-			Actions: []action{&addTaskAction{clusterID: clusterID, task: &mermaidclient.Task{Name: "my-repair"}}},
+			Actions: []action{&addTaskAction{clusterID: clusterID, task: &managerclient.Task{Name: "my-repair"}}},
 		},
 		{
 			Name: "Schedule backup task",
@@ -151,14 +151,14 @@ func TestManagerSynchronization(t *testing.T) {
 				ManagerID: pointer.StringPtr(clusterID),
 			},
 			State: state{
-				Clusters: []*mermaidclient.Cluster{{
+				Clusters: []*managerclient.Cluster{{
 					ID:        clusterID,
 					Name:      clusterName,
 					AuthToken: clusterAuthToken,
 				}},
 			},
 
-			Actions: []action{&addTaskAction{clusterID: clusterID, task: &mermaidclient.Task{Name: "my-backup"}}},
+			Actions: []action{&addTaskAction{clusterID: clusterID, task: &managerclient.Task{Name: "my-backup"}}},
 		},
 		{
 			Name: "Update repair if it's already registered in Manager",
@@ -186,7 +186,7 @@ func TestManagerSynchronization(t *testing.T) {
 				},
 			},
 			State: state{
-				Clusters: []*mermaidclient.Cluster{{
+				Clusters: []*managerclient.Cluster{{
 					ID:        clusterID,
 					Name:      clusterName,
 					AuthToken: clusterAuthToken,
@@ -204,7 +204,7 @@ func TestManagerSynchronization(t *testing.T) {
 				},
 			},
 
-			Actions: []action{&updateTaskAction{clusterID: clusterID, task: &mermaidclient.Task{ID: "repair-id"}}},
+			Actions: []action{&updateTaskAction{clusterID: clusterID, task: &managerclient.Task{ID: "repair-id"}}},
 		},
 		{
 			Name: "Do not update task when it didn't change",
@@ -233,7 +233,7 @@ func TestManagerSynchronization(t *testing.T) {
 				},
 			},
 			State: state{
-				Clusters: []*mermaidclient.Cluster{{
+				Clusters: []*managerclient.Cluster{{
 					ID:        clusterID,
 					Name:      clusterName,
 					AuthToken: clusterAuthToken,
@@ -260,7 +260,7 @@ func TestManagerSynchronization(t *testing.T) {
 				ManagerID: pointer.StringPtr(clusterID),
 			},
 			State: state{
-				Clusters: []*mermaidclient.Cluster{{
+				Clusters: []*managerclient.Cluster{{
 					ID:        clusterID,
 					Name:      clusterName,
 					AuthToken: clusterAuthToken,
