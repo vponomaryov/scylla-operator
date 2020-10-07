@@ -9,8 +9,8 @@ import (
 	"github.com/scylladb/scylla-mgmt-commons/uuid"
 )
 
-// UUIDFromLocation returns a UUID extracted from Location header.
-func UUIDFromLocation(location string) (uuid.UUID, error) {
+// uuidFromLocation returns a UUID extracted from Location header.
+func uuidFromLocation(location string) (uuid.UUID, error) {
 	l, err := url.Parse(location)
 	if err != nil {
 		return uuid.Nil, err

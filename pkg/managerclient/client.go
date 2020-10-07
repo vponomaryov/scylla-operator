@@ -7,15 +7,12 @@ import (
 	"crypto/tls"
 	"net/http"
 	"net/url"
-	"os"
-	"strconv"
 	"sync"
 
 	api "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"github.com/pkg/errors"
-	"github.com/scylladb/scylla-mgmt-commons/managerclient"
 	"github.com/scylladb/scylla-mgmt-commons/managerclient/client/operations"
 	"github.com/scylladb/scylla-mgmt-commons/managerclient/models"
 	"github.com/scylladb/scylla-mgmt-commons/uuid"
@@ -57,10 +54,6 @@ func NewClient(rawURL string, transport http.RoundTripper) (Client, error) {
 	}
 
 	r := api.NewWithClient(u.Host, u.Path, []string{u.Scheme}, httpClient)
-	// debug can be turned on by SWAGGER_DEBUG or DEBUG env variable
-	// we change that to SCTOOL_DUMP_HTTP
-	r.Debug, _ = strconv.ParseBool(os.Getenv("SCTOOL_DUMP_HTTP"))
-
 	return Client{operations: operations.New(r, strfmt.Default)}, nil
 }
 
@@ -74,7 +67,7 @@ func (c Client) CreateCluster(ctx context.Context, cluster *models.Cluster) (str
 		return "", err
 	}
 
-	clusterID, err := managerclient.UUIDFromLocation(resp.Location)
+	clusterID, err := uuidFromLocation(resp.Location)
 	if err != nil {
 		return "", errors.Wrap(err, "cannot parse response")
 	}
@@ -145,7 +138,7 @@ func (c *Client) CreateTask(ctx context.Context, clusterID string, t *models.Tas
 		return uuid.Nil, err
 	}
 
-	taskID, err := managerclient.UUIDFromLocation(resp.Location)
+	taskID, err := uuidFromLocation(resp.Location)
 	if err != nil {
 		return uuid.Nil, errors.Wrap(err, "cannot parse response")
 	}
@@ -183,7 +176,7 @@ func (c *Client) UpdateTask(ctx context.Context, clusterID string, t *models.Tas
 	return err
 }
 
-// ListTasks returns uled tasks within a clusterID, optionaly filtered by task type tp.
+// ListTasks returns scheduled tasks within a clusterID, optionally filtered by task type tp.
 func (c *Client) ListTasks(ctx context.Context, clusterID, taskType string, all bool, status string) ([]*models.ExtendedTask, error) {
 	resp, err := c.operations.GetClusterClusterIDTasks(&operations.GetClusterClusterIDTasksParams{
 		Context:   ctx,

@@ -177,15 +177,14 @@ github.com/prometheus/procfs/internal/util
 github.com/scylladb/go-log
 # github.com/scylladb/go-set v1.0.2
 github.com/scylladb/go-set/strset
-# github.com/scylladb/scylla-mgmt-commons/format v0.0.0-20201007120215-d477d8ad0d41
+# github.com/scylladb/scylla-mgmt-commons/format v0.0.0-20201007124507-e0d10184dca7
 github.com/scylladb/scylla-mgmt-commons/format
-# github.com/scylladb/scylla-mgmt-commons/managerclient v0.0.0-20201007120215-d477d8ad0d41
-github.com/scylladb/scylla-mgmt-commons/managerclient
+# github.com/scylladb/scylla-mgmt-commons/managerclient v0.0.0-20201007124507-e0d10184dca7
 github.com/scylladb/scylla-mgmt-commons/managerclient/client/operations
 github.com/scylladb/scylla-mgmt-commons/managerclient/models
 # github.com/scylladb/scylla-mgmt-commons/timeutc v0.0.0-20201007115835-7e4a89cd16ab
 github.com/scylladb/scylla-mgmt-commons/timeutc
-# github.com/scylladb/scylla-mgmt-commons/uuid v0.0.0-20201007120215-d477d8ad0d41
+# github.com/scylladb/scylla-mgmt-commons/uuid v0.0.0-20201007124507-e0d10184dca7
 github.com/scylladb/scylla-mgmt-commons/uuid
 # github.com/spf13/cobra v0.0.5
 github.com/spf13/cobra

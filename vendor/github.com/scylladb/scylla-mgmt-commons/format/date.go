@@ -14,7 +14,7 @@ const (
 	nowSafety = 30 * time.Second
 )
 
-// ParseStartDate parses the supplied string as a time.Time.
+// ParseStartDate parses the supplied string as a time.Time in UTC timezone.
 func ParseStartDate(value string) (time.Time, error) {
 	now := timeutc.Now()
 
