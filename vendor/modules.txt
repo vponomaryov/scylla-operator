@@ -6,7 +6,7 @@ github.com/BurntSushi/toml
 github.com/PuerkitoBio/purell
 # github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
 github.com/PuerkitoBio/urlesc
-# github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a
+# github.com/asaskevich/govalidator v0.0.0-20200428143746-21a406dcc535
 github.com/asaskevich/govalidator
 # github.com/beorn7/perks v1.0.1
 github.com/beorn7/perks/quantile
@@ -26,18 +26,18 @@ github.com/ghodss/yaml
 github.com/go-logr/logr
 # github.com/go-logr/zapr v0.1.0
 github.com/go-logr/zapr
-# github.com/go-openapi/analysis v0.19.5
+# github.com/go-openapi/analysis v0.19.10
 github.com/go-openapi/analysis
 github.com/go-openapi/analysis/internal
-# github.com/go-openapi/errors v0.19.2
+# github.com/go-openapi/errors v0.19.7
 github.com/go-openapi/errors
 # github.com/go-openapi/jsonpointer v0.19.3
 github.com/go-openapi/jsonpointer
 # github.com/go-openapi/jsonreference v0.19.3
 github.com/go-openapi/jsonreference
-# github.com/go-openapi/loads v0.19.4
+# github.com/go-openapi/loads v0.19.5
 github.com/go-openapi/loads
-# github.com/go-openapi/runtime v0.19.4
+# github.com/go-openapi/runtime v0.19.22
 github.com/go-openapi/runtime
 github.com/go-openapi/runtime/client
 github.com/go-openapi/runtime/logger
@@ -46,17 +46,17 @@ github.com/go-openapi/runtime/middleware/denco
 github.com/go-openapi/runtime/middleware/header
 github.com/go-openapi/runtime/middleware/untyped
 github.com/go-openapi/runtime/security
-# github.com/go-openapi/spec v0.19.3
+# github.com/go-openapi/spec v0.19.8
 github.com/go-openapi/spec
-# github.com/go-openapi/strfmt v0.19.3
+# github.com/go-openapi/strfmt v0.19.5
 github.com/go-openapi/strfmt
-# github.com/go-openapi/swag v0.19.5
+# github.com/go-openapi/swag v0.19.9
 github.com/go-openapi/swag
-# github.com/go-openapi/validate v0.19.5
+# github.com/go-openapi/validate v0.19.11
 github.com/go-openapi/validate
 # github.com/go-stack/stack v1.8.0
 github.com/go-stack/stack
-# github.com/gocql/gocql v0.0.0-20200815110948-5378c8f664e9
+# github.com/gocql/gocql v0.0.0-20200926162733-393f0c961220
 github.com/gocql/gocql
 github.com/gocql/gocql/internal/lru
 github.com/gocql/gocql/internal/murmur
@@ -72,7 +72,7 @@ github.com/golang/protobuf/ptypes
 github.com/golang/protobuf/ptypes/any
 github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/timestamp
-# github.com/golang/snappy v0.0.0-20170215233205-553a64147049
+# github.com/golang/snappy v0.0.1
 github.com/golang/snappy
 # github.com/google/go-cmp v0.4.0
 github.com/google/go-cmp/cmp
@@ -103,13 +103,13 @@ github.com/inconshreveable/mousetrap
 github.com/json-iterator/go
 # github.com/magiconair/properties v1.8.0
 github.com/magiconair/properties
-# github.com/mailru/easyjson v0.7.0
+# github.com/mailru/easyjson v0.7.1
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
 # github.com/matttproud/golang_protobuf_extensions v1.0.1
 github.com/matttproud/golang_protobuf_extensions/pbutil
-# github.com/mitchellh/mapstructure v1.1.2
+# github.com/mitchellh/mapstructure v1.3.2
 github.com/mitchellh/mapstructure
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
 github.com/modern-go/concurrent
@@ -177,16 +177,27 @@ github.com/prometheus/procfs/internal/util
 github.com/scylladb/go-log
 # github.com/scylladb/go-set v1.0.2
 github.com/scylladb/go-set/strset
+# github.com/scylladb/scylla-mgmt-commons/format v0.0.0-20201007120215-d477d8ad0d41
+github.com/scylladb/scylla-mgmt-commons/format
+# github.com/scylladb/scylla-mgmt-commons/managerclient v0.0.0-20201007120215-d477d8ad0d41
+github.com/scylladb/scylla-mgmt-commons/managerclient
+github.com/scylladb/scylla-mgmt-commons/managerclient/client/operations
+github.com/scylladb/scylla-mgmt-commons/managerclient/models
+# github.com/scylladb/scylla-mgmt-commons/timeutc v0.0.0-20201007115835-7e4a89cd16ab
+github.com/scylladb/scylla-mgmt-commons/timeutc
+# github.com/scylladb/scylla-mgmt-commons/uuid v0.0.0-20201007120215-d477d8ad0d41
+github.com/scylladb/scylla-mgmt-commons/uuid
 # github.com/spf13/cobra v0.0.5
 github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.5
 github.com/spf13/pflag
-# github.com/stretchr/testify v1.4.0
+# github.com/stretchr/testify v1.6.1
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# go.mongodb.org/mongo-driver v1.1.2
+# go.mongodb.org/mongo-driver v1.3.4
 go.mongodb.org/mongo-driver/bson
 go.mongodb.org/mongo-driver/bson/bsoncodec
+go.mongodb.org/mongo-driver/bson/bsonoptions
 go.mongodb.org/mongo-driver/bson/bsonrw
 go.mongodb.org/mongo-driver/bson/bsontype
 go.mongodb.org/mongo-driver/bson/primitive
@@ -213,7 +224,7 @@ golang.org/x/crypto/ssh/terminal
 # golang.org/x/lint v0.0.0-20190930215403-16217165b5de
 golang.org/x/lint
 golang.org/x/lint/golint
-# golang.org/x/net v0.0.0-20200520004742-59133d7f0dd7
+# golang.org/x/net v0.0.0-20200602114024-627f9648deb9
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
 golang.org/x/net/html
@@ -325,6 +336,8 @@ gopkg.in/inf.v0
 gopkg.in/tomb.v1
 # gopkg.in/yaml.v2 v2.3.0
 gopkg.in/yaml.v2
+# gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
+gopkg.in/yaml.v3
 # honnef.co/go/tools v0.0.1-2019.2.3
 honnef.co/go/tools/arg
 honnef.co/go/tools/cmd/staticcheck
