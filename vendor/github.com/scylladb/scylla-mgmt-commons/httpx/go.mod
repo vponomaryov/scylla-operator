@@ -1,0 +1,1 @@
+module "github.com/scylladb/scylla-mgmt-commons/httpx"

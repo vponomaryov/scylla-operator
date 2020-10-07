@@ -3,15 +3,11 @@ module github.com/scylladb/scylla-operator
 go 1.13
 
 require (
-	github.com/bitly/go-hostpool v0.1.0 // indirect
 	github.com/blang/semver v3.5.0+incompatible
 	github.com/cenkalti/backoff v2.2.1+incompatible
 	github.com/ghodss/yaml v1.0.0
-	github.com/go-openapi/errors v0.19.7
 	github.com/go-openapi/runtime v0.19.22
 	github.com/go-openapi/strfmt v0.19.5
-	github.com/go-openapi/swag v0.19.9
-	github.com/go-openapi/validate v0.19.11
 	github.com/gocql/gocql v0.0.0-20200926162733-393f0c961220
 	github.com/google/go-cmp v0.4.0
 	github.com/hailocab/go-hostpool v0.0.0-20160125115350-e80d13ce29ed
@@ -23,9 +19,11 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/scylladb/go-log v0.0.4
 	github.com/scylladb/go-set v1.0.2
-	github.com/scylladb/scylla-mgmt-commons/format v0.0.0-20201007124507-e0d10184dca7
-	github.com/scylladb/scylla-mgmt-commons/managerclient v0.0.0-20201007124507-e0d10184dca7
-	github.com/scylladb/scylla-mgmt-commons/uuid v0.0.0-20201007124507-e0d10184dca7
+	github.com/scylladb/scylla-mgmt-commons/format v0.0.0-20201007140813-8ae21b32e0d5
+	github.com/scylladb/scylla-mgmt-commons/managerclient v0.0.0-20201007140813-8ae21b32e0d5
+	github.com/scylladb/scylla-mgmt-commons/middleware v0.0.0-20201007141033-a2b414e94e66
+	github.com/scylladb/scylla-mgmt-commons/scyllaclient v0.0.0-20201007140813-8ae21b32e0d5
+	github.com/scylladb/scylla-mgmt-commons/uuid v0.0.0-20201007140813-8ae21b32e0d5
 	github.com/spf13/cobra v0.0.5
 	github.com/stretchr/testify v1.6.1
 	go.uber.org/config v1.4.0

@@ -14,7 +14,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	scyllaOperations "github.com/scylladb/scylla-operator/pkg/scyllaclient/internal/scylla/client/operations"
+	"github.com/scylladb/scylla-mgmt-commons/middleware"
+	scyllaOperations "github.com/scylladb/scylla-mgmt-commons/scyllaclient/scylla/client/operations"
 	"github.com/scylladb/scylla-operator/pkg/util/timeutc"
 )
 
@@ -178,7 +179,7 @@ func (c *Client) PingN(ctx context.Context, host string, n int, timeout time.Dur
 		d, err := c.Ping(ctxWithTimeout, host)
 		if err != nil {
 			if ctxWithTimeout.Err() != nil {
-				return timeout, ErrTimeout
+				return timeout, middleware.ErrTimeout
 			}
 			return 0, err
 		}
@@ -192,7 +193,7 @@ func (c *Client) PingN(ctx context.Context, host string, n int, timeout time.Dur
 // Ping checks if host is available using HTTP ping and returns RTT.
 // Ping requests are not retried, use this function with caution.
 func (c *Client) Ping(ctx context.Context, host string) (time.Duration, error) {
-	ctx = noRetry(ctx)
+	ctx = middleware.Interactive(ctx)
 
 	t := timeutc.Now()
 	err := c.ping(ctx, host)
@@ -214,7 +215,7 @@ func (c *Client) newURL(host, path string) url.URL {
 
 func (c *Client) ping(ctx context.Context, host string) error {
 	_, err := c.scyllaOps.StorageServiceScyllaReleaseVersionGet(&scyllaOperations.StorageServiceScyllaReleaseVersionGetParams{
-		Context: forceHost(ctx, host),
+		Context: middleware.ForceHost(ctx, host),
 	})
 	if err != nil {
 		return err

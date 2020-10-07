@@ -16,10 +16,10 @@ import (
 	"github.com/hailocab/go-hostpool"
 	"github.com/scylladb/go-log"
 	"github.com/scylladb/go-set/strset"
-	"github.com/scylladb/scylla-operator/pkg/auth"
-	scyllaClient "github.com/scylladb/scylla-operator/pkg/scyllaclient/internal/scylla/client"
-	scyllaOperations "github.com/scylladb/scylla-operator/pkg/scyllaclient/internal/scylla/client/operations"
-	"github.com/scylladb/scylla-operator/pkg/util/httpx"
+	"github.com/scylladb/scylla-mgmt-commons/middleware"
+	"github.com/scylladb/scylla-mgmt-commons/scyllaclient"
+	scyllaClient "github.com/scylladb/scylla-mgmt-commons/scyllaclient/scylla/client"
+	scyllaOperations "github.com/scylladb/scylla-mgmt-commons/scyllaclient/scylla/client/operations"
 )
 
 type Client struct {
@@ -34,9 +34,6 @@ type Client struct {
 }
 
 func NewClient(config Config, logger log.Logger) (*Client, error) {
-	/*if err := config.Validate(); err != nil {
-		return nil, errors.Wrap(err, "invalid config")
-	}*/
 	setOpenAPIGlobals()
 	hosts := make([]string, len(config.Hosts))
 	copy(hosts, config.Hosts)
@@ -47,11 +44,11 @@ func NewClient(config Config, logger log.Logger) (*Client, error) {
 		config.Transport = DefaultTransport()
 	}
 	transport := config.Transport
-	transport = timeout(transport, config.Timeout)
-	transport = requestLogger(transport, logger)
-	transport = hostPool(transport, pool, config.Port)
-	transport = auth.AddToken(transport, config.AuthToken)
-	transport = fixContentType(transport)
+	transport = middleware.Timeout(transport, config.Timeout)
+	transport = middleware.RequestLogger(transport, logger)
+	transport = middleware.HostPool(transport, pool, config.Port)
+	transport = middleware.AddToken(transport, config.AuthToken)
+	transport = middleware.FixScyllaContentType(transport)
 
 	c := &http.Client{Transport: transport}
 
@@ -60,8 +57,8 @@ func NewClient(config Config, logger log.Logger) (*Client, error) {
 	)
 	// Debug can be turned on by SWAGGER_DEBUG or DEBUG env variable
 	scyllaRuntime.Debug = false
-
-	scyllaOps := scyllaOperations.New(retryable(scyllaRuntime, config, logger), strfmt.Default)
+	scyllaTransport := middleware.Retryable(scyllaRuntime, config.Backoff, config.InteractiveBackoff, len(config.Hosts), scyllaclient.StatusCodeOf, logger)
+	scyllaOps := scyllaOperations.New(scyllaTransport, strfmt.Default)
 
 	return &Client{
 		config:    config,
@@ -96,7 +93,7 @@ func (c *Client) HostDatacenter(ctx context.Context, host string) (dc string, er
 
 func (c *Client) Status(ctx context.Context, host string) (NodeStatusInfoSlice, error) {
 	// Always query same host
-	ctx = forceHost(ctx, host)
+	ctx = middleware.ForceHost(ctx, host)
 
 	// Get all hosts
 	resp, err := c.scyllaOps.StorageServiceHostIDGet(&scyllaOperations.StorageServiceHostIDGetParams{Context: ctx})
@@ -158,7 +155,7 @@ func (c *Client) Status(ctx context.Context, host string) (NodeStatusInfoSlice, 
 }
 
 func (c *Client) Decommission(ctx context.Context, host string) error {
-	_, err := c.scyllaOps.StorageServiceDecommissionPost(&scyllaOperations.StorageServiceDecommissionPostParams{Context: forceHost(ctx, host)})
+	_, err := c.scyllaOps.StorageServiceDecommissionPost(&scyllaOperations.StorageServiceDecommissionPostParams{Context: middleware.ForceHost(ctx, host)})
 	if err != nil {
 		return err
 	}
@@ -166,7 +163,7 @@ func (c *Client) Decommission(ctx context.Context, host string) error {
 }
 
 func (c *Client) OperationMode(ctx context.Context, host string) (OperationalMode, error) {
-	resp, err := c.scyllaOps.StorageServiceOperationModeGet(&scyllaOperations.StorageServiceOperationModeGetParams{Context: forceHost(ctx, host)})
+	resp, err := c.scyllaOps.StorageServiceOperationModeGet(&scyllaOperations.StorageServiceOperationModeGetParams{Context: middleware.ForceHost(ctx, host)})
 	if err != nil {
 		return "", err
 	}
@@ -229,20 +226,5 @@ func setOpenAPIGlobals() {
 		// Disable debug output to stderr, it could have been enabled by setting
 		// SWAGGER_DEBUG or DEBUG env variables.
 		apiMiddleware.Debug = false
-	})
-}
-
-// fixContentType adjusts Scylla REST API response so that it can be consumed
-// by Open API.
-func fixContentType(next http.RoundTripper) http.RoundTripper {
-	return httpx.RoundTripperFunc(func(req *http.Request) (resp *http.Response, err error) {
-		defer func() {
-			if resp != nil {
-				// Force JSON, Scylla returns "text/plain" that misleads the
-				// unmarshaller and breaks processing.
-				resp.Header.Set("Content-Type", "application/json")
-			}
-		}()
-		return next.RoundTrip(req)
 	})
 }

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/scylladb/scylla-mgmt-commons/middleware"
 	"github.com/scylladb/scylla-operator/pkg/util/network"
 	"go.uber.org/multierr"
 )
@@ -25,10 +26,10 @@ type Config struct {
 	Timeout time.Duration `yaml:"timeout"`
 	// PoolDecayDuration specifies size of time window to measure average
 	// request time in Epsilon-Greedy host pool.
-	Backoff BackoffConfig
+	Backoff middleware.BackoffConfig
 	// InteractiveBackoff specifies backoff for interactive requests i.e.
 	// originating from API / sctool.
-	InteractiveBackoff BackoffConfig
+	InteractiveBackoff middleware.BackoffConfig
 	// How many seconds to wait for the job to finish before returning
 	// the info response.
 	LongPollingSeconds int64
@@ -36,15 +37,6 @@ type Config struct {
 	// Transport allows for setting a custom round tripper to send HTTP
 	// requests over not standard connections i.e. over SSH tunnel.
 	Transport http.RoundTripper
-}
-
-// BackoffConfig specifies request exponential backoff parameters.
-type BackoffConfig struct {
-	WaitMin    time.Duration
-	WaitMax    time.Duration
-	MaxRetries uint64
-	Multiplier float64
-	Jitter     float64
 }
 
 // DefaultConfig returns a Config initialized with default values.
@@ -55,14 +47,14 @@ func DefaultConfig() Config {
 		Port:    "10001",
 		Scheme:  "https",
 		Timeout: 15 * time.Second,
-		Backoff: BackoffConfig{
+		Backoff: middleware.BackoffConfig{
 			WaitMin:    1 * time.Second,
 			WaitMax:    30 * time.Second,
 			MaxRetries: 9,
 			Multiplier: 2,
 			Jitter:     0.2,
 		},
-		InteractiveBackoff: BackoffConfig{
+		InteractiveBackoff: middleware.BackoffConfig{
 			WaitMin:    time.Second,
 			MaxRetries: 1,
 		},

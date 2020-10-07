@@ -177,14 +177,27 @@ github.com/prometheus/procfs/internal/util
 github.com/scylladb/go-log
 # github.com/scylladb/go-set v1.0.2
 github.com/scylladb/go-set/strset
-# github.com/scylladb/scylla-mgmt-commons/format v0.0.0-20201007124507-e0d10184dca7
+# github.com/scylladb/scylla-mgmt-commons/format v0.0.0-20201007140813-8ae21b32e0d5
 github.com/scylladb/scylla-mgmt-commons/format
-# github.com/scylladb/scylla-mgmt-commons/managerclient v0.0.0-20201007124507-e0d10184dca7
+# github.com/scylladb/scylla-mgmt-commons/httpx v0.0.0-20201007133817-3a5a9f249639
+github.com/scylladb/scylla-mgmt-commons/httpx
+# github.com/scylladb/scylla-mgmt-commons/managerclient v0.0.0-20201007140813-8ae21b32e0d5
 github.com/scylladb/scylla-mgmt-commons/managerclient/client/operations
 github.com/scylladb/scylla-mgmt-commons/managerclient/models
-# github.com/scylladb/scylla-mgmt-commons/timeutc v0.0.0-20201007115835-7e4a89cd16ab
+# github.com/scylladb/scylla-mgmt-commons/middleware v0.0.0-20201007141033-a2b414e94e66
+github.com/scylladb/scylla-mgmt-commons/middleware
+# github.com/scylladb/scylla-mgmt-commons/retry v0.0.0-20201007133817-3a5a9f249639
+github.com/scylladb/scylla-mgmt-commons/retry
+# github.com/scylladb/scylla-mgmt-commons/scyllaclient v0.0.0-20201007140813-8ae21b32e0d5
+github.com/scylladb/scylla-mgmt-commons/scyllaclient
+github.com/scylladb/scylla-mgmt-commons/scyllaclient/agent/models
+github.com/scylladb/scylla-mgmt-commons/scyllaclient/scylla/client
+github.com/scylladb/scylla-mgmt-commons/scyllaclient/scylla/client/operations
+github.com/scylladb/scylla-mgmt-commons/scyllaclient/scylla/models
+github.com/scylladb/scylla-mgmt-commons/scyllaclient/scylla_v2/models
+# github.com/scylladb/scylla-mgmt-commons/timeutc v0.0.0-20201007133817-3a5a9f249639
 github.com/scylladb/scylla-mgmt-commons/timeutc
-# github.com/scylladb/scylla-mgmt-commons/uuid v0.0.0-20201007124507-e0d10184dca7
+# github.com/scylladb/scylla-mgmt-commons/uuid v0.0.0-20201007140813-8ae21b32e0d5
 github.com/scylladb/scylla-mgmt-commons/uuid
 # github.com/spf13/cobra v0.0.5
 github.com/spf13/cobra
