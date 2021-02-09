@@ -15,6 +15,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/client-go/util/retry"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -174,25 +175,28 @@ func (a *RackReplaceNode) replaceNode(ctx context.Context, state *State, member 
 	)
 
 	a.Logger.Debug(ctx, "Waiting for PVC deletion", "member", member.Name, "pvc", pvc.Name)
-	if err := wait.PollImmediate(time.Second, time.Minute, func() (done bool, err error) {
-		p := &corev1.PersistentVolumeClaim{}
-		if err := cc.Get(ctx, naming.NamespacedName(naming.PVCNameForPod(member.Name), member.Namespace), p); err != nil {
-			if apierrors.IsNotFound(err) {
-				a.Logger.Debug(ctx, "PVC deleted", "member", member.Name, "pvc", pvc.Name)
-				return true, nil
+	if err := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+		return wait.PollImmediate(time.Second, time.Minute, func() (done bool, err error) {
+			p := &corev1.PersistentVolumeClaim{}
+			if err := cc.Get(ctx, naming.NamespacedName(naming.PVCNameForPod(member.Name), member.Namespace), p); err != nil {
+				if apierrors.IsNotFound(err) {
+					a.Logger.Debug(ctx, "PVC deleted", "member", member.Name, "pvc", pvc.Name)
+					return true, nil
+				}
+				return false, errors.Wrap(err, "failed to get pvc")
 			}
-			return false, errors.Wrap(err, "failed to get pvc")
-		}
 
-		// Remove finalizer, which will wait until pod is deleted.
-		// We want to delete pod anyway, so it's better to delete pvc immediately.
-		pvcCopy := p.DeepCopy()
-		pvcCopy.SetFinalizers([]string{})
-		if err := cc.Update(ctx, pvcCopy); err != nil {
-			return false, errors.Wrap(err, "failed to update pvc")
-		}
+			// Remove finalizer, which will wait until pod is deleted.
+			// We want to delete pod anyway, so it's better to delete pvc immediately.
+			pvcCopy := p.DeepCopy()
+			pvcCopy.SetFinalizers([]string{})
+			if err := cc.Update(ctx, pvcCopy); err != nil {
+				// Do not wrap error to allow retrying using RetryOnConflict
+				return false, err
+			}
 
-		return false, nil
+			return false, nil
+		})
 	}); err != nil {
 		if !errors.Is(err, wait.ErrWaitTimeout) {
 			return errors.Wrap(err, "wait pvc deletion")
